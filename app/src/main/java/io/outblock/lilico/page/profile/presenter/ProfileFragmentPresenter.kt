@@ -1,5 +1,6 @@
 package io.outblock.lilico.page.profile.presenter
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import androidx.transition.TransitionManager
 import com.zackratos.ultimatebarx.ultimatebarx.addStatusBarTopPadding
@@ -46,6 +47,8 @@ import io.outblock.lilico.utils.isNotificationPermissionGrand
 import io.outblock.lilico.utils.isRegistered
 import io.outblock.lilico.utils.loadAvatar
 import io.outblock.lilico.utils.uiScope
+import io.outblock.lilico.page.reactnative.MyReactActivity
+
 
 class ProfileFragmentPresenter(
     private val fragment: ProfileFragment,
@@ -103,7 +106,8 @@ class ProfileFragmentPresenter(
             )
         }
 
-        binding.group4.aboutPreference.setOnClickListener { AboutActivity.launch(context) }
+//        binding.group4.aboutPreference.setOnClickListener { AboutActivity.launch(context) }
+        binding.group4.aboutPreference.setOnClickListener { context.startActivity(Intent(context, MyReactActivity::class.java))}
         binding.group5.switchAccountPreference.setOnClickListener {
             AccountSwitchDialog.show(fragment.childFragmentManager)
         }
