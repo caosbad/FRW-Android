@@ -1,16 +1,24 @@
 package io.outblock.lilico.page.reactnative
 
+//import io.outblock.lilico.base.activity.BaseActivity
+
+import android.os.Build
 import android.os.Bundle
 import com.facebook.react.BuildConfig
 import com.facebook.react.PackageList
+import com.facebook.react.ReactActivity
+import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.ReactInstanceManager
 import com.facebook.react.ReactRootView
 import com.facebook.react.common.LifecycleState
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
+import com.facebook.react.defaults.DefaultReactActivityDelegate
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 import com.facebook.soloader.SoLoader
-import io.outblock.lilico.base.activity.BaseActivity
+import expo.modules.ReactActivityDelegateWrapper
 
-class MyReactActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
+
+class MyReactActivity : ReactActivity(), DefaultHardwareBackBtnHandler {
     private var mReactRootView: ReactRootView? = null
     private var mReactInstanceManager: ReactInstanceManager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,9 +44,38 @@ class MyReactActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
         setContentView(mReactRootView)
     }
 
+//    override fun invokeDefaultOnBackPressed() {
+//        super.onBackPressed()
+//    }
+
     override fun invokeDefaultOnBackPressed() {
-        super.onBackPressed()
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+            if (!moveTaskToBack(false)) {
+                // For non-root activities, use the default implementation to finish them.
+                super.invokeDefaultOnBackPressed()
+            }
+            return
+        }
+
+        // Use the default back button implementation on Android S
+        // because it's doing more than {@link Activity#moveTaskToBack} in fact.
+        super.invokeDefaultOnBackPressed()
     }
+
+    override fun getMainComponentName(): String? {
+        return "main"
+    }
+
+    override fun createReactActivityDelegate(): ReactActivityDelegate? {
+        return ReactActivityDelegateWrapper(
+            this, BuildConfig.IS_NEW_ARCHITECTURE_ENABLED, DefaultReactActivityDelegate(
+                this,
+                mainComponentName!!,  // If you opted-in for the New Architecture, we enable the Fabric Renderer.
+                fabricEnabled
+            )
+        )
+    }
+
 
     override fun onPause() {
         super.onPause()
