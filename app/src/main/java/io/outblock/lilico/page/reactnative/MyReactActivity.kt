@@ -9,6 +9,7 @@ import com.facebook.react.common.LifecycleState
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 import com.facebook.soloader.SoLoader
 import io.outblock.lilico.base.activity.BaseActivity
+import cn.reactnative.modules.update.UpdateContext
 
 class MyReactActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
     private var mReactRootView: ReactRootView? = null
@@ -29,10 +30,12 @@ class MyReactActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
             .addPackages(packages)
             .setUseDeveloperSupport(BuildConfig.DEBUG)
             .setInitialLifecycleState(LifecycleState.RESUMED)
+            .setJSBundleFile(UpdateContext.getBundleUrl(this, "assets://index.android.bundle"))
             .build()
-        // 注意这里的MyReactNativeApp 必须对应"index.js"中的
-        // "AppRegistry.registerComponent()"的第一个参数
-        mReactRootView!!.startReactApplication(mReactInstanceManager, "MyReactNativeApp", null)
+
+        UpdateContext.setCustomInstanceManager(mReactInstanceManager)
+
+        mReactRootView!!.startReactApplication(mReactInstanceManager, "frw-rn-native", null)
         setContentView(mReactRootView)
     }
 
