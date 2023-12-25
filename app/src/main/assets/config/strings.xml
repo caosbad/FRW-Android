@@ -1,0 +1,4 @@
+ <resources>
+    <string name="app_name">Flow Ref Dev</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">3J9kK7VnhBSrzSpeQCzoY0HifJ2lMm4k9rIT8</string>
+ </resources>

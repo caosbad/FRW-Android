@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">Flow Ref Dev</string>
     <string name="file_provider_authorities" translatable="false">io.outblock.lilico.dev.provider</string>
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
+    <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">3J9kK7VnhBSrzSpeQCzoY0HifJ2lMm4k9rIT8</string>
 </resources>

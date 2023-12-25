@@ -5,11 +5,13 @@ import com.facebook.react.BuildConfig
 import com.facebook.react.PackageList
 import com.facebook.react.ReactInstanceManager
 import com.facebook.react.ReactRootView
+import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.common.LifecycleState
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 import com.facebook.soloader.SoLoader
+import com.microsoft.codepush.react.CodePush
+import com.swmansion.reanimated.ReanimatedPackage
 import io.outblock.lilico.base.activity.BaseActivity
-import cn.reactnative.modules.update.UpdateContext
 
 class MyReactActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
     private var mReactRootView: ReactRootView? = null
@@ -19,21 +21,28 @@ class MyReactActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
         SoLoader.init(this, false)
         mReactRootView = ReactRootView(this)
         val packages = PackageList(application).getPackages()
-        // 有一些第三方可能不能自动链接，对于这些包我们可以用下面的方式手动添加进来：
-        // packages.add(new MyReactNativePackage());
-        // 同时需要手动把他们添加到settings.gradle和 app/build.gradle配置文件中。
+
+        // Adding manually Reanimated package here, with overriding getReactInstanceManager method
+        // Adding manually Reanimated package here, with overriding getReactInstanceManager method
+        packages.add(object : ReanimatedPackage() {
+            override fun getReactInstanceManager(reactContext: ReactApplicationContext): ReactInstanceManager {
+                // Implement here your way to get the ReactInstanceManager
+                return mReactInstanceManager!!
+            }
+        })
         mReactInstanceManager = ReactInstanceManager.builder()
             .setApplication(application)
             .setCurrentActivity(this)
             .setBundleAssetName("index.android.bundle")
             .setJSMainModulePath("index")
+//            .setJSIModulesPackage(new ReanimatedJSIModulePackage()) // Adding ReanimatedJSIModulePackage here
             .addPackages(packages)
             .setUseDeveloperSupport(BuildConfig.DEBUG)
             .setInitialLifecycleState(LifecycleState.RESUMED)
-            .setJSBundleFile(UpdateContext.getBundleUrl(this, "assets://index.android.bundle"))
+            .setJSBundleFile(CodePush.getJSBundleFile())
             .build()
 
-        UpdateContext.setCustomInstanceManager(mReactInstanceManager)
+//        UpdateContext.setCustomInstanceManager(mReactInstanceManager)
 
         mReactRootView!!.startReactApplication(mReactInstanceManager, "frw-rn-native", null)
         setContentView(mReactRootView)

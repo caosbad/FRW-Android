@@ -246,8 +246,10 @@ dependencies {
     implementation "com.facebook.react:react-android"
     implementation "com.facebook.react:hermes-android"
     implementation 'com.facebook.soloader:soloader:0.10.5+'
+//    implementation project(':react-native-code-push')
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
+apply from: file("../../node_modules/react-native-code-push/android/codepush.gradle")
+applyNativeModulesAppBuildGradle(project)
 
